@@ -13,7 +13,7 @@ export default class Game extends Component {
   logTurn = (idx) => {
     this.setPlayer();
     this.setCurrentSquare(idx);
-    this.setValue(idx);
+    // this.setValue(idx);
   };
 
   setPlayer = () => {

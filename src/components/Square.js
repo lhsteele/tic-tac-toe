@@ -1,14 +1,13 @@
 import React from 'react'
 
 export default function Square(props) {
-  const { idx, value } = props
 
   return (
     <div
       className="square"
-      onClick={() => props.logTurn()}
+      onClick={() => props.logTurn(props.idx)}
     >
-      {value}
+      {props.value}
     </div>
   )
 }
