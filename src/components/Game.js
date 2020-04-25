@@ -6,14 +6,9 @@ export default class Game extends Component {
     super(props);
     this.state = {
       isX: false,
-      currentSquare: null
+      currentSquare: null,
+      history: Array(9).fill(null)
     }
-  };
-
-  logTurn = (idx) => {
-    this.setPlayer();
-    this.setCurrentSquare(idx);
-    // this.setValue(idx);
   };
 
   setPlayer = () => {
@@ -22,16 +17,21 @@ export default class Game extends Component {
     })
   };
 
-  setCurrentSquare = (idx) => {
-    this.setState({ currentSquare: idx })
+  addToHistory = idx => {
+    const currentHistory = this.state.history;
+    const currentSq = this.state.currentSquare;
+    currentHistory[currentSq] = this.state.isX ? 'X' : 'O'
+    this.setState({ history: currentHistory })
   };
 
-  setValue = (idx) => {
-    if (idx === this.props.currentSquare) {
-      return this.state.isX ? 'X' : 'O'
-    }
-    return null;
-  }
+  setCurrentSquare = idx => {
+    this.setState({ currentSquare: idx }, () => this.addToHistory())
+  };
+
+  logTurn = idx => {
+    this.setPlayer();
+    this.setCurrentSquare(idx);
+  };
 
   render() {
     return (
@@ -41,7 +41,7 @@ export default class Game extends Component {
             isX={this.state.isX}
             logTurn={this.logTurn}
             currentSquare={this.state.currentSquare}
-            value={this.setValue()}
+            gameHistory={this.state.history}
           />
         </div>
       </div>
