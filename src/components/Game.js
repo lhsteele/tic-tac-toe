@@ -4,6 +4,16 @@ import Board from './Board';
 export default class Game extends Component {
   constructor(props) {
     super(props);
+    this.winningPositions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8]
+    ];
     this.state = {
       isX: false,
       currentSquare: null,
@@ -28,12 +38,33 @@ export default class Game extends Component {
     this.setState({ currentSquare: idx }, () => this.addToHistory())
   };
 
+  xWin = history => {
+    const xPositions = history.map((el, i) => { 
+      return el === 'X' ? i : null
+    }).filter(el => el !== null);
+
+    this.winningPositions.forEach(pos => {
+      pos.forEach(p => {
+        if (!xPositions.includes(p)) {
+          return false
+        }
+      })
+      return true
+      // return xPositions.includes(pos) ? true : false
+    });
+  };
+
+  oWin = history => {
+
+  };
+
   logTurn = idx => {
     this.setPlayer();
     this.setCurrentSquare(idx);
   };
 
   render() {
+    console.log(this.xWin(this.state.history))
     return (
       <div className="game">
         <div className="game-board">

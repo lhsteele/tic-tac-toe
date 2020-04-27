@@ -12,6 +12,7 @@ export default class Board extends Component {
   renderSquares(isX, gameHistory) {
     const squares = new Array(9).fill()
       .map((el, i) => el = <Square
+        key={i}
         idx={i} 
         logTurn={this.props.logTurn} 
         value={this.setValues(i, gameHistory)}
