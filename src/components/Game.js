@@ -38,24 +38,36 @@ export default class Game extends Component {
     this.setState({ currentSquare: idx }, () => this.addToHistory())
   };
 
-  xWin = history => {
-    const xPositions = history.map((el, i) => { 
+  findXPositions = history => {
+    return history.map((el, i) => {
       return el === 'X' ? i : null
     }).filter(el => el !== null);
+  };
 
-    this.winningPositions.forEach(pos => {
-      pos.forEach(p => {
-        if (!xPositions.includes(p)) {
-          return false
-        }
-      })
-      return true
-      // return xPositions.includes(pos) ? true : false
-    });
+  findOPositions = history => {
+    return history.map((el, i) => {
+      return el === 'O' ? i : null
+    }).filter(el => el !== null)
+  }
+
+  xWin = () => {
+    const xPositions = this.findXPositions(this.state.history)
+    for (let i = 0; i < this.winningPositions.length; i++) {
+      if (xPositions.includes(this.winningPositions[i][0]) && xPositions.includes(this.winningPositions[i][1]) && xPositions.includes(this.winningPositions[i][2])) {
+        return true;
+      }
+    }
+    return false;
   };
 
   oWin = history => {
-
+    const oPositions = this.findOPositions(this.state.history)
+    for (let i = 0; i < this.winningPositions.length; i++) {
+      if (oPositions.includes(this.winningPositions[i][0]) && oPositions.includes(this.winningPositions[i][1]) && oPositions.includes(this.winningPositions[i][2])) {
+        return true;
+      }
+    }
+    return false;
   };
 
   logTurn = idx => {
@@ -63,11 +75,23 @@ export default class Game extends Component {
     this.setCurrentSquare(idx);
   };
 
+  findWinner = () => {
+    const history = this.state.history;
+    const gameOver = history.every(el => el !== null)
+    if (this.xWin()) {
+      return 'X is the winner!'
+    } else if (this.oWin()) {
+      return 'O is the winner!'
+    } else if (gameOver && !this.xWin() && !this.oWin()) {
+      return 'No one wins!'
+    }
+  };
+
   render() {
-    console.log(this.xWin(this.state.history))
     return (
       <div className="game">
         <div className="game-board">
+          <div className="win-banner">{this.findWinner()}</div>
           <Board 
             isX={this.state.isX}
             logTurn={this.logTurn}
